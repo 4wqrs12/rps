@@ -3,7 +3,7 @@ from pymongo import MongoClient
 from dotenv import load_dotenv
 from flask_jwt_extended import JWTManager
 from flask_bcrypt import Bcrypt
-from datetime import datetime
+from datetime import datetime, timedelta
 
 def create_jwt(flask_app):
     jwt = JWTManager(flask_app)
@@ -13,6 +13,8 @@ load_dotenv()
 
 bcrypt = Bcrypt()
 jwt_key = os.getenv("JWT_KEY")
+access_expire = timedelta(minutes=15)
+refresh_expire = timedelta(days=7)
 flask_key = os.getenv("FLASK_KEY")
 mongo_uri = os.getenv("MONGO_URI")
 client = MongoClient(mongo_uri)
