@@ -1,2 +1,10 @@
 [] jwt auth
 [] bot matches
+
+Theme Colors:
+Almond	#EADDCA
+Brass	#E1C16E
+Bronze	#CD7F32
+Buff	#DAA06D
+Burnt Umber	#6E260E
+Camel	#C19A6B
