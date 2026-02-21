@@ -15,7 +15,7 @@ def api():
     @jwt.token_in_blocklist_loader
     def token_revoked(jwt_header, jwt_payload):
         jti = jwt_payload["jti"]
-        token = revoked_col.find({"jti": jti})
+        token = revoked_col.find_one({"jti": jti})
         return token is not None
     
     revoked_col.create_index("expires_at", expireAfterSeconds=0)

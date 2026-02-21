@@ -13,7 +13,7 @@
 }
 
 .navbar-routes {
-  @apply p-4 hover:bg-[#5e200c] rounded-md text-[#E1C16E];
+  @apply p-4 hover:bg-[#5e200c] rounded-md text-[#E1C16E] cursor-pointer;
 }
 
 .input-field {

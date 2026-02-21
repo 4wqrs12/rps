@@ -1,6 +1,8 @@
 import { useState } from "react";
-// TODO: connect w/ backend, same for registering
+import { useAuth } from "./AuthProvider";
+
 function LoginPage() {
+  const { login } = useAuth();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
@@ -12,11 +14,33 @@ function LoginPage() {
     setPassword(e.target.value);
   }
 
+  async function loginUser(e) {
+    e.preventDefault();
+    try {
+      const res = await fetch("http://localhost:5000/api/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ username, password }),
+      });
+
+      const data = await res.json();
+      if (data.success) {
+        login(data.data.accessToken, data.data.refreshToken);
+      } else {
+        alert(data.message);
+      }
+    } catch (err) {
+      console.log(`Error logging in: ${err}`);
+    }
+  }
+
   return (
     <div className="route-content">
       <h1 className="route-title">Login</h1>
       <div className="bg-[#C19A6B] w-64 rounded-md">
-        <form className="p-5">
+        <form onSubmit={loginUser} className="p-5">
           <div className="mb-5">
             <input
               type="text"

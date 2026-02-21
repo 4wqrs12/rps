@@ -1,3 +1,5 @@
+import Logout from "./auth/Logout";
+
 function Navbar() {
   return (
     <div className="bg-[#6E260E] m-2 rounded-md">
@@ -9,6 +11,7 @@ function Navbar() {
           <a href="/register" className="navbar-routes">
             Register
           </a>
+          <Logout />
         </div>
       </nav>
     </div>
