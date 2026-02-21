@@ -1,5 +1,5 @@
 from flask import Blueprint, jsonify, request
-from flask_jwt_extended import create_access_token, create_refresh_token, jwt_required, get_jwt_identity, get_jwt
+from flask_jwt_extended import create_access_token, create_refresh_token, jwt_required, get_jwt_identity, get_jwt 
 from api.config import user_col, bcrypt, revoked_col
 from datetime import datetime
 
@@ -73,3 +73,9 @@ def logout_refresh():
     revoked_col.insert_one({"jti": jti, "expires_at": datetime.fromtimestamp(exp)})
 
     return jsonify({"success": True, "message": "Refresh token revoked", "data": token})
+
+@endpoints.route("/api/get-identity", methods=["GET"])
+@jwt_required()
+def get_id():
+    user = get_jwt_identity()
+    return jsonify({"success": True, "message": "Id found", "data": user})

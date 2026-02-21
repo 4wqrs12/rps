@@ -4,6 +4,9 @@ function Navbar() {
   return (
     <div className="bg-[#6E260E] m-2 rounded-md">
       <nav className="flex">
+        <a href="/test" className="navbar-routes">
+          Logged In?
+        </a>
         <div className="ml-auto flex">
           <a href="/login" className="navbar-routes">
             Login

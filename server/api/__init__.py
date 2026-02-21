@@ -9,7 +9,6 @@ def api():
     app.config["JWT_SECRET_KEY"] = jwt_key
     app.config["JWT_ACCESS_TOKEN_EXPIRES"] = access_expire
     app.config["JWT_REFRESH_TOKEN_EXPIRES"] = refresh_expire
-    CORS(app)
     jwt.init_app(app)
     bcrypt.init_app(app)
     @jwt.token_in_blocklist_loader
