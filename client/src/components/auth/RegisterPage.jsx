@@ -1,8 +1,6 @@
 import { useState } from "react";
-import { useAuth } from "./AuthProvider";
 
 function RegisterPage() {
-  const { login } = useAuth();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 

@@ -2,6 +2,7 @@
 [] bot matches
 [] make login/register div box a seperate component
 [] use modal divs instead of alerts
+[] clear fields after logging in
 
 Theme Colors:
 Almond	#EADDCA

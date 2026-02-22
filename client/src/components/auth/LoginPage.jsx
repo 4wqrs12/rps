@@ -1,8 +1,6 @@
 import { useState } from "react";
-import { useAuth } from "./AuthProvider";
 
 function LoginPage() {
-  const { login } = useAuth();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
@@ -28,6 +26,9 @@ function LoginPage() {
 
       const data = await res.json();
       console.log(`Login: ${data.message}`);
+      if (!data.success) {
+        alert(data.message);
+      }
     } catch (err) {
       console.log(`Error logging in: ${err}`);
     }
