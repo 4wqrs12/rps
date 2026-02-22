@@ -27,11 +27,7 @@ function RegisterPage() {
       });
 
       const data = await res.json();
-      if (data.success) {
-        login(data.data.accessToken, data.data.refreshToken);
-      } else {
-        alert(data.message);
-      }
+      console.log(`Register: ${data.message}`);
     } catch (err) {
       console.log(`Error logging in: ${err}`);
     }
