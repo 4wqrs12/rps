@@ -6,25 +6,12 @@ function Logout() {
   async function logoutUser() {
     console.log(accessToken, refreshToken);
     try {
-      if (accessToken) {
-        const res = await fetch("http://localhost:5000/api/logout", {
-          method: "POST",
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
-        });
-        const data = await res.json();
-        console.log(`accesstoken message: ${data.message}`);
-      }
-
-      if (refreshToken) {
-        await fetch("http://localhost:5000/api/logout-refresh", {
-          method: "POST",
-          headers: {
-            Authorization: `Bearer ${refreshToken}`,
-          },
-        });
-      }
+      const res = await fetch("http://localhost:5000/api/logout", {
+        method: "POST",
+        credentials: "include",
+      });
+      const data = await res.json();
+      console.log(`logout msg: ${data.message}`);
     } catch (err) {
       console.log("Logout API failed, continuing...");
     }

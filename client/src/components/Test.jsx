@@ -6,13 +6,10 @@ function Test() {
   const [message, setMessage] = useState("");
 
   async function handleClick() {
-    console.log(accessToken);
     try {
       const res = await fetch("http://localhost:5000/api/get-identity", {
         method: "GET",
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
+        credentials: "include",
       });
       const data = await res.json();
       if (data.success) {

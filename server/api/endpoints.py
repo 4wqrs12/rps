@@ -1,5 +1,5 @@
 from flask import Blueprint, jsonify, request
-from flask_jwt_extended import create_access_token, create_refresh_token, jwt_required, get_jwt_identity, get_jwt 
+from flask_jwt_extended import create_access_token, create_refresh_token, jwt_required, get_jwt_identity, get_jwt, set_access_cookies, set_refresh_cookies, unset_jwt_cookies
 from api.config import user_col, bcrypt, revoked_col
 from datetime import datetime
 
@@ -21,7 +21,10 @@ def login():
     if bcrypt.check_password_hash(doc["password"], password):
         access_token = create_access_token(identity=username)
         refresh_token = create_refresh_token(identity=username)
-        return jsonify({"success": True, "message": "Logged in", "data": {"accessToken": access_token, "refreshToken": refresh_token}})
+        res = jsonify({"success": True, "message": "Logged in"})
+        set_access_cookies(res, access_token)
+        set_refresh_cookies(res, refresh_token)
+        return res    
     else:
         return jsonify({"success": False, "message": "Incorrect password", "data": data})
 
@@ -41,38 +44,33 @@ def register():
 
     access_token = create_access_token(identity=username)
     refresh_token = create_refresh_token(identity=username)
+    res = jsonify({"success": True, "message": "Account created"})
 
-    return jsonify({"success": True, "message": "Account creatd", "data": {"accessToken": access_token, "refreshToken": refresh_token}})
+    set_access_cookies(res, access_token)
+    set_refresh_cookies(res, refresh_token)
+
+    return res
 
 @endpoints.route("/api/refresh", methods=["POST"])
 @jwt_required(refresh=True)
 def refresh():
     current_user = get_jwt_identity()
     new_access_token = create_access_token(identity=current_user)
-
-    return jsonify({"success": True, "message": "New token created", "data": {"accessToken": new_access_token}})
+    res = jsonify({"success": True, "message": "New token created"})
+    set_access_cookies(res, new_access_token)
+    return res
 
 @endpoints.route("/api/logout", methods=["POST"])
-@jwt_required()
+@jwt_required(refresh=True)
 def logout():
     token = get_jwt()
     jti = token["jti"]
     exp = token["exp"]
 
     revoked_col.insert_one({"jti": jti, "expires_at": datetime.fromtimestamp(exp)})
-
-    return jsonify({"success": True, "message": "Access token revoked", "data": token})
-
-@endpoints.route("/api/logout-refresh", methods=["POST"])
-@jwt_required(refresh=True)
-def logout_refresh():
-    token = get_jwt()
-    jti = token["jti"]
-    exp = token["exp"]
-
-    revoked_col.insert_one({"jti": jti, "expires_at": datetime.fromtimestamp(exp)})
-
-    return jsonify({"success": True, "message": "Refresh token revoked", "data": token})
+    res = jsonify({"success": True, "message": "Access token revoked"})
+    unset_jwt_cookies(res)
+    return res
 
 @endpoints.route("/api/get-identity", methods=["GET"])
 @jwt_required()

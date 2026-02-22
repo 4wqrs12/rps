@@ -23,14 +23,11 @@ function LoginPage() {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({ username, password }),
+        credentials: "include",
       });
 
       const data = await res.json();
-      if (data.success) {
-        login(data.data.accessToken, data.data.refreshToken);
-      } else {
-        alert(data.message);
-      }
+      console.log(`Login: ${data.message}`);
     } catch (err) {
       console.log(`Error logging in: ${err}`);
     }

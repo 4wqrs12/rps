@@ -9,16 +9,12 @@ export function AuthProvider({ children }) {
   const login = (newAccessToken, newRefreshToken) => {
     setAccessToken(newAccessToken);
     setRefreshToken(newRefreshToken);
-    localStorage.setItem("access", newAccessToken);
-    localStorage.setItem("refresh", newRefreshToken);
     console.log(newAccessToken, newRefreshToken);
   };
 
   const logout = () => {
     setAccessToken(null);
     setRefreshToken(null);
-    localStorage.removeItem("access");
-    localStorage.removeItem("refresh");
   };
 
   return (
