@@ -10,7 +10,7 @@ bcrypt = Bcrypt()
 
 jwt_key = os.getenv("JWT_KEY")
 flask_key = os.getenv("FLASK_KEY")
-access_expire = timedelta(minutes=1)
+access_expire = timedelta(minutes=15)
 refresh_expire = timedelta(days=7)
 mongo_uri = os.getenv("MONGO_URI")
 client = MongoClient(mongo_uri)
