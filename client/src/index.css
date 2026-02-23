@@ -21,5 +21,9 @@
 }
 
 .btn {
-  @apply cursor-pointer rounded-md;
+  @apply cursor-pointer rounded-md border-2 p-3;
+}
+
+.btn:disabled {
+  @apply cursor-auto text-[#797979];
 }

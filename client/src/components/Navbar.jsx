@@ -8,6 +8,9 @@ function Navbar() {
         <a href="/" className="navbar-routes">
           Home
         </a>
+        <a href="/bot" className="navbar-routes">
+          Bot Match
+        </a>
         <div className="ml-auto flex">
           <a href="/login" className="navbar-routes">
             Login

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-function Home() {
+function HomePage() {
   const [loggedIn, setIsLoggedIn] = useState(false);
   const [username, setUsername] = useState("");
 
@@ -50,4 +50,4 @@ function Home() {
   );
 }
 
-export default Home;
+export default HomePage;
