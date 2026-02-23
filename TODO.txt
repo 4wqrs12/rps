@@ -1,4 +1,5 @@
-[] jwt auth
+[✅] jwt auth
+[] home page
 [] bot matches
 [] make login/register div box a seperate component
 [] use modal divs instead of alerts
@@ -11,3 +12,5 @@ Bronze	#CD7F32
 Buff	#DAA06D
 Burnt Umber	#6E260E
 Camel	#C19A6B
+
+✅👷‍♂️
