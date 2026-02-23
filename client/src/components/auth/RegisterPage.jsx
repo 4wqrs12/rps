@@ -1,4 +1,5 @@
 import { useState } from "react";
+import UserAuth from "./UserAuth";
 
 function RegisterPage() {
   const [username, setUsername] = useState("");
@@ -32,39 +33,47 @@ function RegisterPage() {
   }
 
   return (
-    <div className="route-content">
-      <h1 className="route-title">Register</h1>
-      <div className="bg-[#C19A6B] w-64 rounded-md">
-        <form onSubmit={registerUser} className="p-5">
-          <div className="mb-5">
-            <input
-              type="text"
-              placeholder="Username..."
-              value={username}
-              onChange={handleUsernameChange}
-              className="input-field"
-            />
-          </div>
-          <div className="mb-5">
-            <input
-              type="text"
-              placeholder="Password..."
-              value={password}
-              onChange={handlePasswordChange}
-              className="input-field"
-            />
-          </div>
-          <div>
-            <button
-              type="submit"
-              className="btn bg-[#6E260E] p-3 hover:bg-[#571e0b]"
-            >
-              Register
-            </button>
-          </div>
-        </form>
-      </div>
-    </div>
+    // <div className="route-content">
+    //   <h1 className="route-title">Register</h1>
+    //   <div className="bg-[#C19A6B] w-64 rounded-md">
+    //     <form onSubmit={registerUser} className="p-5">
+    //       <div className="mb-5">
+    //         <input
+    //           type="text"
+    //           placeholder="Username..."
+    //           value={username}
+    //           onChange={handleUsernameChange}
+    //           className="input-field"
+    //         />
+    //       </div>
+    //       <div className="mb-5">
+    //         <input
+    //           type="text"
+    //           placeholder="Password..."
+    //           value={password}
+    //           onChange={handlePasswordChange}
+    //           className="input-field"
+    //         />
+    //       </div>
+    //       <div>
+    //         <button
+    //           type="submit"
+    //           className="btn bg-[#6E260E] p-3 hover:bg-[#571e0b]"
+    //         >
+    //           Register
+    //         </button>
+    //       </div>
+    //     </form>
+    //   </div>
+    // </div>
+    <UserAuth
+      title={"Register"}
+      user={username}
+      userHandler={handleUsernameChange}
+      pass={password}
+      passHandler={handlePasswordChange}
+      fetchFunc={registerUser}
+    />
   );
 }
 
