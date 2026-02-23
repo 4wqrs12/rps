@@ -1,9 +1,10 @@
 [✅] jwt auth
-[] home page
+[✅] home page
 [] bot matches
 [] make login/register div box a seperate component
 [] use modal divs instead of alerts
 [] clear fields after logging in
+[] make refreshing tokens in frontend a seperate function
 
 Theme Colors:
 Almond	#EADDCA

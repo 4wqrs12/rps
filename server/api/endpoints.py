@@ -71,3 +71,8 @@ def logout():
     res = jsonify({"success": True, "message": "Access token revoked"})
     unset_jwt_cookies(res)
     return res
+
+@endpoints.route("/api/get-identity", methods=["POST"])
+@jwt_required()
+def get_id():
+    return jsonify({"success": True, "message": "User found", "data": get_jwt_identity()})

@@ -19,6 +19,7 @@ function Logout() {
         }
       }
       console.log(`logout msg: ${data.message}`);
+      location.href = "/";
     } catch (err) {
       console.log("Logout API failed, continuing...");
     }
