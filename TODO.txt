@@ -3,9 +3,10 @@
 [] bot matches
 [] make login/register div box a seperate component
 [] use modal divs instead of alerts
-[] clear fields after logging in
+[] clear fields after logging in/registering
 [] make refreshing tokens in frontend a seperate function
 [] make ready button in bot match be under option button rather than next to when options are not shown, same for play again
+[] mutliplayer matches
 
 Theme Colors:
 Almond	#EADDCA
