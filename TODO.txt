@@ -1,7 +1,7 @@
 [✅] jwt auth
 [✅] home page
 [✅] bot matches
-[] make login/register div box a seperate component
+[✅] make login/register div box a seperate component
 [] use modal divs instead of alerts
 [] clear fields after logging in/registering
 [] make refreshing tokens in frontend a seperate function
