@@ -2,6 +2,8 @@ from flask import Blueprint, jsonify, request
 from flask_jwt_extended import create_access_token, create_refresh_token, jwt_required, get_jwt_identity, get_jwt, set_access_cookies, set_refresh_cookies, unset_jwt_cookies
 from api.config import user_col, bcrypt, revoked_col
 from datetime import datetime
+import random
+from utils.game_funcs import determine_winner
 
 endpoints = Blueprint("endpoints", __name__)
 
@@ -76,3 +78,18 @@ def logout():
 @jwt_required()
 def get_id():
     return jsonify({"success": True, "message": "User found", "data": get_jwt_identity()})
+
+
+@endpoints.route("/api/bot-match", methods=["POST"])
+def bot_match():
+    data = request.get_json()
+    player = data.get("playerChoice", "")
+
+    if not player:
+        return jsonify({"success": False, "message": "Please choose an item", "data": data})
+    
+    bot_choice = random.choice(["Rock", "Paper", "Scissor"])
+    if determine_winner(player, bot_choice):
+        return jsonify({"success": True, "message": "Winner found", "data": "Player"})
+    else:
+        return jsonify({"success": True, "message": "Winner found", "data": "Bot"})
