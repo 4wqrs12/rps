@@ -3,7 +3,7 @@ import LoginPage from "./components/auth/LoginPage";
 import RegisterPage from "./components/auth/RegisterPage";
 import Navbar from "./components/Navbar";
 import HomePage from "./components/HomePage";
-import BotMatchPage from "./components/BotMatchPage";
+import BotMatchPage from "./components/game/BotMatchPage";
 
 function App() {
   return (

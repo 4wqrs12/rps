@@ -1,9 +1,11 @@
 import { useState } from "react";
+import Modal from "../Modal";
 
 function UserItemSelection({ backendRoute }) {
   const [option, setOption] = useState({ text: "", item: "" });
   const [showOptions, setShowOptions] = useState(false);
   const [show, setShow] = useState(true);
+  const [showModal, setShowModal] = useState(false);
   const [showAgain, setShowAgain] = useState(false);
 
   function setItem(t, i) {
@@ -24,7 +26,8 @@ function UserItemSelection({ backendRoute }) {
       });
       const data = await res.json();
       if (data.success) {
-        alert(`${data.message}: ${data.data}`);
+        //        alert(`${data.message}: ${data.data}`);
+        setShowModal(true);
         setOption({ ...option, text: "", item: "" });
         setShow(false);
         setShowAgain(true);
@@ -69,6 +72,7 @@ function UserItemSelection({ backendRoute }) {
           Play Again
         </button>
       )}
+      <Modal title={"Winner"} text={"test"} showModal={showModal} />
     </>
   );
 }
