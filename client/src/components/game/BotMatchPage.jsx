@@ -1,4 +1,3 @@
-import { useState } from "react";
 import UserItemSelection from "./UserItemSelection";
 
 function BotMatchPage() {
