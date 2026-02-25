@@ -7,6 +7,7 @@ function UserItemSelection({ backendRoute }) {
   const [show, setShow] = useState(true);
   const [showModal, setShowModal] = useState(false);
   const [showAgain, setShowAgain] = useState(false);
+  const [fetchedData, setFetcheData] = useState({});
 
   function setItem(t, i) {
     setOption({ ...option, text: t, item: i });
@@ -26,7 +27,7 @@ function UserItemSelection({ backendRoute }) {
       });
       const data = await res.json();
       if (data.success) {
-        //        alert(`${data.message}: ${data.data}`);
+        setFetcheData(data);
         setShowModal(true);
         setOption({ ...option, text: "", item: "" });
         setShow(false);
@@ -72,7 +73,12 @@ function UserItemSelection({ backendRoute }) {
           Play Again
         </button>
       )}
-      <Modal title={"Winner"} text={"test"} showModal={showModal} />
+      <Modal
+        title={"Winner:"}
+        text={fetchedData.data}
+        showModal={showModal}
+        setShowModal={setShowModal}
+      />
     </>
   );
 }

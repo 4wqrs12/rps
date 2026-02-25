@@ -16,7 +16,7 @@ function UserAuth({ title, user, userHandler, pass, passHandler, fetchFunc }) {
           <div className="mb-5">
             <input
               type="text"
-              placeholder="Password"
+              placeholder="Password..."
               value={pass}
               onChange={passHandler}
               className="input-field"
