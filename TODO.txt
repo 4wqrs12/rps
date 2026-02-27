@@ -5,7 +5,8 @@
 [✅‍️] use modal divs instead of alerts
 [✅] clear fields after logging in/registering
 [✅] make refreshing tokens in frontend a seperate function
-[] make ready button in bot match be under option button rather than next to when options are not shown, same for play again
+[✅] make ready button in bot match be under option button rather than next to when options are not shown, same for play again
+[] make bot matches 3 rounds before declaring final winner
 [] mutliplayer matches
 [] make informal console logs into modal divs
 [] add button to look at passwords in text forms, but make passwords be in password/hidden form by default

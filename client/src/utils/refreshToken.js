@@ -1,4 +1,3 @@
-// Handles refreshing tokens for authentication
 export async function refreshToken() {
   try {
     const refreshRes = await fetch("http://localhost:5000/api/refresh", {
