@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { refreshToken } from "../utils/refreshToken";
 
 function HomePage() {
   const [loggedIn, setIsLoggedIn] = useState(false);
@@ -13,13 +14,10 @@ function HomePage() {
       const data = await res.json();
 
       if (res.status === 401) {
-        const refreshRes = await fetch("http://localhost:5000/api/refresh", {
-          method: "POST",
-          credentials: "include",
-        });
-        const refreshData = await refreshRes.json();
+        const refreshData = await refreshToken();
         if (refreshData.success) {
           console.log(refreshData.message);
+          location.reload();
         } else {
           console.log("Refresh token failed");
         }

@@ -1,3 +1,5 @@
+import { refreshToken } from "../../utils/refreshToken";
+
 function Logout() {
   async function logoutUser() {
     try {
@@ -7,11 +9,7 @@ function Logout() {
       });
       const data = await res.json();
       if (res.status === 401) {
-        const refreshRes = await fetch("http://localhost:5000/api/refresh", {
-          method: "POST",
-          credentials: "include",
-        });
-        const refreshData = await refreshRes.json();
+        const refreshData = await refreshToken();
         if (refreshData.success) {
           console.log(refreshData.message);
         } else {
