@@ -60,7 +60,7 @@ function UserItemSelection({ backendRoute }) {
               📄
             </button>
             <button onClick={() => setItem("Scissor", "✂️")} className="btn">
-              ✂️
+              ✂️ 
             </button>
           </div>
         )}
