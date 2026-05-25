@@ -5,6 +5,8 @@ from flask_jwt_extended import JWTManager
 from flask_bcrypt import Bcrypt
 from datetime import timedelta
 
+load_dotenv()
+
 jwt = JWTManager()
 bcrypt = Bcrypt()
 
