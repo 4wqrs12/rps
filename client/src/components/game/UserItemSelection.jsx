@@ -15,7 +15,7 @@ function UserItemSelection({ backendRoute }) {
   function setItem(t, i) {
     setOption({ ...option, text: t, item: i });
   }
-
+// make bot and player points seperate component?
   async function readyPlayer() {
     setShowOptions(false);
     setShow(true);
