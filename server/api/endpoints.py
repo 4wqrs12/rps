@@ -7,6 +7,9 @@ from utils.game_funcs import determine_winner
 
 endpoints = Blueprint("endpoints", __name__)
 
+player_score = 0
+bot_score = 0
+
 @endpoints.route("/api/login", methods=["POST"])
 def login():
     data = request.get_json()
@@ -82,14 +85,22 @@ def get_id():
 
 @endpoints.route("/api/bot-match", methods=["POST"])
 def bot_match():
+    global player_score, bot_score
+    # player1 -> player, player2 -> bot
     data = request.get_json()
     player = data.get("playerChoice", "")
-
     if not player:
         return jsonify({"success": False, "message": "Please choose an item", "data": data})
-    
     bot_choice = random.choice(["Rock", "Paper", "Scissor"])
     if determine_winner(player, bot_choice):
-        return jsonify({"success": True, "message": "Winner found", "data": "Player"})
+        player_score += 1
+        if player_score == 3:
+            player_score = 0
+            return jsonify({"success": True, "message": "Game", "data": {"winner": "Player", "score": 3}})
+        return jsonify({"success": True, "message": "Winner found", "data": {"winner": "Player", "score": player_score}})
     else:
-        return jsonify({"success": True, "message": "Winner found", "data": "Bot"})
+        bot_score += 1
+        if bot_score == 3:
+            bot_score = 0
+            return jsonify({"success": True, "message": "Game", "data": {"winner": "Bot", "score": 3}})
+        return jsonify({"success": True, "message": "Winner found", "data": {"winner": "Bot", "score": bot_score}})

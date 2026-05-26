@@ -7,7 +7,10 @@ function UserItemSelection({ backendRoute }) {
   const [show, setShow] = useState(true);
   const [showModal, setShowModal] = useState(false);
   const [showAgain, setShowAgain] = useState(false);
-  const [fetchedData, setFetcheData] = useState({});
+  const [winner, setWinner] = useState("");
+  const [fetchedData, setFetchedData] = useState({});
+  const [botScore, setBotScore] = useState(0);
+  const [playerScore, setPlayerScore] = useState(0);
 
   function setItem(t, i) {
     setOption({ ...option, text: t, item: i });
@@ -25,13 +28,21 @@ function UserItemSelection({ backendRoute }) {
         },
         body: JSON.stringify({ playerChoice: option.text }),
       });
-      const data = await res.json();
-      if (data.success) {
-        setFetcheData(data);
+      const jsonData = await res.json();
+      if (jsonData.success) {
+        setFetchedData(jsonData);
         setShowModal(true);
         setOption({ ...option, text: "", item: "" });
         setShow(false);
         setShowAgain(true);
+        setWinner(jsonData.data.winner);
+        if (jsonData.data.winner === "Player") {
+          console.log(jsonData.data.score);
+          setPlayerScore(jsonData.data.score);
+        } else if (jsonData.data.winner === "Bot") {
+          console.log(jsonData.data.score);
+          setBotScore(jsonData.data.score);
+        }
       }
     } catch (err) {
       console.log(`Error: ${err}`);
@@ -40,6 +51,7 @@ function UserItemSelection({ backendRoute }) {
 
   return (
     <>
+    <h2 className="font-extrabold">🤖{botScore} - 👤{playerScore}</h2>
       <div className="flex flex-col items-start">
         {show && (
           <button
@@ -75,9 +87,10 @@ function UserItemSelection({ backendRoute }) {
           Play Again
         </button>
       )}
+      <button onClick={() => console.log(fetchedData)}>fetched data</button>
       <Modal
-        title={"Winner:"}
-        text={fetchedData.data}
+        title={fetchedData.message}
+        text={winner}
         showModal={showModal}
         setShowModal={setShowModal}
       />
