@@ -96,11 +96,11 @@ def bot_match():
         player_score += 1
         if player_score == 3:
             player_score = 0
-            return jsonify({"success": True, "message": "Game", "data": {"winner": "Player", "score": 3}})
+            return jsonify({"success": True, "message": "Thats Game!", "data": {"winner": "Player", "score": 3, "final": True}})
         return jsonify({"success": True, "message": "Winner found", "data": {"winner": "Player", "score": player_score}})
     else:
         bot_score += 1
         if bot_score == 3:
             bot_score = 0
-            return jsonify({"success": True, "message": "Game", "data": {"winner": "Bot", "score": 3}})
+            return jsonify({"success": True, "message": "Thats Game!", "data": {"winner": "Bot", "score": 3, "final": True}})
         return jsonify({"success": True, "message": "Winner found", "data": {"winner": "Bot", "score": bot_score}})

@@ -9,12 +9,21 @@ function UserItemSelection({ backendRoute }) {
   const [showAgain, setShowAgain] = useState(false);
   const [winner, setWinner] = useState("");
   const [fetchedData, setFetchedData] = useState({});
-  const [botScore, setBotScore] = useState(0);
-  const [playerScore, setPlayerScore] = useState(0);
 
   function setItem(t, i) {
     setOption({ ...option, text: t, item: i });
   }
+
+  function playAgain() {
+    if (sessionStorage.getItem("playerScore") == 3 || sessionStorage.getItem("botScore") == 3) {
+      console.log(sessionStorage.getItem("playerScore"));
+      console.log(sessionStorage.getItem("botScore"));
+      sessionStorage.removeItem("playerScore");
+      sessionStorage.removeItem("botScore");
+    }
+    window.location.reload();
+  }
+
 // make bot and player points seperate component?
   async function readyPlayer() {
     setShowOptions(false);
@@ -36,12 +45,14 @@ function UserItemSelection({ backendRoute }) {
         setShow(false);
         setShowAgain(true);
         setWinner(jsonData.data.winner);
+        // if (jsonData.data.final === true) {
+        //   sessionStorage.removeItem("playerScore");
+        //   sessionStorage.removeItem("botScore");
+        // }
         if (jsonData.data.winner === "Player") {
-          console.log(jsonData.data.score);
-          setPlayerScore(jsonData.data.score);
+          sessionStorage.setItem("playerScore", jsonData.data.score);
         } else if (jsonData.data.winner === "Bot") {
-          console.log(jsonData.data.score);
-          setBotScore(jsonData.data.score);
+          sessionStorage.setItem("botScore", jsonData.data.score);
         }
       }
     } catch (err) {
@@ -51,7 +62,7 @@ function UserItemSelection({ backendRoute }) {
 
   return (
     <>
-    <h2 className="font-extrabold">🤖{botScore} - 👤{playerScore}</h2>
+    <h2 className="font-extrabold">🤖{sessionStorage.getItem("botScore")} - 👤{sessionStorage.getItem("playerScore")}</h2>
       <div className="flex flex-col items-start">
         {show && (
           <button
@@ -83,11 +94,10 @@ function UserItemSelection({ backendRoute }) {
         )}
       </div>
       {showAgain && (
-        <button className="btn mt-3" onClick={() => location.reload()}>
+        <button className="btn mt-3" onClick={playAgain}>
           Play Again
         </button>
       )}
-      <button onClick={() => console.log(fetchedData)}>fetched data</button>
       <Modal
         title={fetchedData.message}
         text={winner}
