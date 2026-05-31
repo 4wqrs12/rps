@@ -1,7 +1,7 @@
 import { useState } from "react";
 import Modal from "../Modal";
 
-function UserItemSelection({ backendRoute }) {
+function UserItemSelection() {
   const [option, setOption] = useState({ text: "", item: "" });
   const [showOptions, setShowOptions] = useState(false);
   const [show, setShow] = useState(true);
@@ -16,21 +16,17 @@ function UserItemSelection({ backendRoute }) {
 
   function playAgain() {
     if (sessionStorage.getItem("playerScore") == 3 || sessionStorage.getItem("botScore") == 3) {
-      console.log(sessionStorage.getItem("playerScore"));
-      console.log(sessionStorage.getItem("botScore"));
       sessionStorage.removeItem("playerScore");
       sessionStorage.removeItem("botScore");
     }
     window.location.reload();
   }
 
-// make bot and player points seperate component?
   async function readyPlayer() {
     setShowOptions(false);
     setShow(true);
-    console.log(option);
     try {
-      const res = await fetch(`http://localhost:5000/api/${backendRoute}`, {
+      const res = await fetch(`http://localhost:5000/api/bot-match`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -45,10 +41,6 @@ function UserItemSelection({ backendRoute }) {
         setShow(false);
         setShowAgain(true);
         setWinner(jsonData.data.winner);
-        // if (jsonData.data.final === true) {
-        //   sessionStorage.removeItem("playerScore");
-        //   sessionStorage.removeItem("botScore");
-        // }
         if (jsonData.data.winner === "Player") {
           sessionStorage.setItem("playerScore", jsonData.data.score);
         } else if (jsonData.data.winner === "Bot") {

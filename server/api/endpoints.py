@@ -86,7 +86,6 @@ def get_id():
 @endpoints.route("/api/bot-match", methods=["POST"])
 def bot_match():
     global player_score, bot_score
-    # player1 -> player, player2 -> bot
     data = request.get_json()
     player = data.get("playerChoice", "")
     if not player:
