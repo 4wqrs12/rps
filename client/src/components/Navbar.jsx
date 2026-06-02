@@ -11,6 +11,10 @@ function Navbar() {
         <a href="/bot" className="navbar-routes">
           Bot Match
         </a>
+        <a href="/rooms" className="navbar-routes">
+          Rooms
+        </a>
+        {/* right side */}
         <div className="ml-auto flex">
           <a href="/login" className="navbar-routes">
             Login

@@ -10,6 +10,7 @@
 [] mutliplayer matches
 [] make informal console logs into modal divs
 [] add button to look at passwords in text forms, but make passwords be in password/hidden form by default
+[] change Modal.jsx name
 
 Theme Colors:
 Almond	#EADDCA

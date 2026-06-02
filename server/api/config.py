@@ -19,3 +19,4 @@ client = MongoClient(mongo_uri)
 db = client["rps"]
 user_col = db["users"]
 revoked_col = db["revoked"]
+rooms_col = db["rooms"]

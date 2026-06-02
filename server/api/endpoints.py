@@ -1,6 +1,6 @@
 from flask import Blueprint, jsonify, request
 from flask_jwt_extended import create_access_token, create_refresh_token, jwt_required, get_jwt_identity, get_jwt, set_access_cookies, set_refresh_cookies, unset_jwt_cookies
-from api.config import user_col, bcrypt, revoked_col
+from api.config import user_col, bcrypt, revoked_col, rooms_col
 from datetime import datetime
 import random
 from utils.game_funcs import determine_winner
@@ -103,3 +103,13 @@ def bot_match():
             bot_score = 0
             return jsonify({"success": True, "message": "Thats Game!", "data": {"winner": "Bot", "score": 3, "final": True}})
         return jsonify({"success": True, "message": "Winner found", "data": {"winner": "Bot", "score": bot_score}})
+
+# players will also be in these rooms too, in the documents as a list
+@endpoints.route("/api/create-room", methods=["POST"])
+def create_room():
+    data = request.get_json()
+    room_name = data.get("roomName", "")
+    if room_name is None:
+        return jsonify({"success": False, "message": "No room name given", "data": data})
+    rooms_col.insert_one({"roomName": room_name, "createdAt": datetime.now()})
+    return jsonify({"success": True, "message": "Room created!", "data": data})
