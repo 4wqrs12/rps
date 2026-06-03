@@ -6,7 +6,6 @@ import random
 from utils.game_funcs import determine_winner
 
 endpoints = Blueprint("endpoints", __name__)
-
 player_score = 0
 bot_score = 0
 
