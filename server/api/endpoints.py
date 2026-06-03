@@ -8,7 +8,8 @@ from utils.game_funcs import determine_winner
 endpoints = Blueprint("endpoints", __name__)
 player_score = 0
 bot_score = 0
-#test
+
+
 @endpoints.route("/api/login", methods=["POST"])
 def login():
     data = request.get_json()
@@ -28,9 +29,10 @@ def login():
         res = jsonify({"success": True, "message": "Logged in"})
         set_access_cookies(res, access_token)
         set_refresh_cookies(res, refresh_token)
-        return res    
+        return res
     else:
         return jsonify({"success": False, "message": "Incorrect password", "data": data})
+
 
 @endpoints.route("/api/register", methods=["POST"])
 def register():
@@ -55,6 +57,7 @@ def register():
 
     return res
 
+
 @endpoints.route("/api/refresh", methods=["POST"])
 @jwt_required(refresh=True)
 def refresh():
@@ -63,6 +66,7 @@ def refresh():
     res = jsonify({"success": True, "message": "New token created"})
     set_access_cookies(res, new_access_token)
     return res
+
 
 @endpoints.route("/api/logout", methods=["POST"])
 @jwt_required(refresh=True)
@@ -75,6 +79,7 @@ def logout():
     res = jsonify({"success": True, "message": "Access token revoked"})
     unset_jwt_cookies(res)
     return res
+
 
 @endpoints.route("/api/get-identity", methods=["POST"])
 @jwt_required()
@@ -102,6 +107,7 @@ def bot_match():
             bot_score = 0
             return jsonify({"success": True, "message": "Thats Game!", "data": {"winner": "Bot", "score": 3, "final": True}})
         return jsonify({"success": True, "message": "Winner found", "data": {"winner": "Bot", "score": bot_score}})
+
 
 # players will also be in these rooms too, in the documents as a list
 @endpoints.route("/api/create-room", methods=["POST"])
