@@ -8,7 +8,7 @@ from utils.game_funcs import determine_winner
 endpoints = Blueprint("endpoints", __name__)
 player_score = 0
 bot_score = 0
-
+#test
 @endpoints.route("/api/login", methods=["POST"])
 def login():
     data = request.get_json()
