@@ -44,9 +44,10 @@ def register():
         return jsonify({"success": False, "message": "Enter username and password", "data": data})
     if user_col.find_one({"username": username}):
         return jsonify({"success": False, "message": "User already exists", "data": data})
-    
+
     hashed_pass = bcrypt.generate_password_hash(password).decode("UTF-8")
-    user_col.insert_one({"username": username, "password": hashed_pass, "createdAt": datetime.now()})
+    user_col.insert_one(
+        {"username": username, "password": hashed_pass, "createdAt": datetime.now()})
 
     access_token = create_access_token(identity=username)
     refresh_token = create_refresh_token(identity=username)
@@ -75,7 +76,8 @@ def logout():
     jti = token["jti"]
     exp = token["exp"]
 
-    revoked_col.insert_one({"jti": jti, "expires_at": datetime.fromtimestamp(exp)})
+    revoked_col.insert_one(
+        {"jti": jti, "expires_at": datetime.fromtimestamp(exp)})
     res = jsonify({"success": True, "message": "Access token revoked"})
     unset_jwt_cookies(res)
     return res
