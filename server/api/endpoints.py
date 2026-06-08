@@ -119,4 +119,6 @@ def create_room():
     if room_name is None:
         return jsonify({"success": False, "message": "No room name given", "data": data})
     rooms_col.insert_one({"roomName": room_name, "createdAt": datetime.now()})
+    all_rooms = rooms_col.find({})
+    print([room["roomName"] for room in all_rooms])
     return jsonify({"success": True, "message": "Room created!", "data": data})

@@ -2,9 +2,28 @@ import { useEffect, useState } from "react";
 
 function RoomModal({ showModal, setShowModal }) {
   const [roomName, setRoomName] = useState("");
+  const [rooms, setRooms] = useState([]);
 
   function roomNameHandler(e) {
     setRoomName(e.target.value);
+  }
+
+  async function createRoom() {
+    try {
+      const res = await fetch("http://localhost:5000/api/create-room", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ roomName }),
+      });
+
+      const data = await res.json();
+      // make to modal
+      console.log(data.success && data.message);
+    } catch (e) {
+      console.log(`Error: ${e}`);
+    }
   }
 
   return (
