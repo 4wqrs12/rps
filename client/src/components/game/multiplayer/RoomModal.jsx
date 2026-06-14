@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import RoomInfo from "./RoomInfo";
 
 function RoomModal({ showModal, setShowModal }) {
   const [roomName, setRoomName] = useState("");
@@ -51,7 +52,10 @@ function RoomModal({ showModal, setShowModal }) {
             />
 
             {roomName && (
-              <button className="btn px-6 bg-[#b14b29] mt-3 hover:bg-[#803820] text-amber-500">
+              <button
+                onClick={createRoom}
+                className="btn px-6 bg-[#b14b29] mt-3 hover:bg-[#803820] text-amber-500"
+              >
                 +
               </button>
             )}

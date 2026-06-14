@@ -6,7 +6,7 @@ function RoomCreation() {
   return (
     <>
       <button
-        className="btn px-6 bg-[#b14b29] mt-3 hover:bg-[#803820] text-amber-200"
+        className="btn px-6 bg-[#b14b29] mt-3 hover:bg-[#803820] text-amber-200 mb-6"
         onClick={() => setShowModal(true)}
       >
         Create Room
