@@ -1,9 +1,13 @@
-from flask import Blueprint, jsonify, request
-from flask_jwt_extended import create_access_token, create_refresh_token, jwt_required, get_jwt_identity, get_jwt, set_access_cookies, set_refresh_cookies, unset_jwt_cookies
-from api.config import user_col, bcrypt, revoked_col, rooms_col
-from datetime import datetime
-import random
 from utils.game_funcs import determine_winner
+import random
+from datetime import datetime
+from api.config import user_col, bcrypt, revoked_col, rooms_col
+from flask import Blueprint, jsonify, request
+from flask_jwt_extended import (create_access_token, create_refresh_token,
+                                jwt_required,
+                                get_jwt_identity,
+                                get_jwt, set_access_cookies,
+                                set_refresh_cookies, unset_jwt_cookies)
 
 endpoints = Blueprint("endpoints", __name__)
 player_score = 0
@@ -17,12 +21,15 @@ def login():
     password = data.get("password", "")
 
     if not username or not password:
-        return jsonify({"success": False, "message": "Please enter both username and password", "data": data})
+        return jsonify({"success": False,
+                        "message": "Please enter both username and password",
+                        "data": data})
 
     doc = user_col.find_one({"username": username})
 
     if not doc:
-        return jsonify({"success": False, "message": "User does not exist", "data": data})
+        return jsonify({"success": False, "message": "User does not exist",
+                        "data": data})
     if bcrypt.check_password_hash(doc["password"], password):
         access_token = create_access_token(identity=username)
         refresh_token = create_refresh_token(identity=username)
@@ -31,7 +38,8 @@ def login():
         set_refresh_cookies(res, refresh_token)
         return res
     else:
-        return jsonify({"success": False, "message": "Incorrect password", "data": data})
+        return jsonify({"success": False, "message": "Incorrect password",
+                        "data": data})
 
 
 @endpoints.route("/api/register", methods=["POST"])
@@ -41,13 +49,17 @@ def register():
     password = data.get("password", "")
 
     if not username or not password:
-        return jsonify({"success": False, "message": "Enter username and password", "data": data})
+        return jsonify({"success": False,
+                        "message": "Enter username and password",
+                        "data": data})
     if user_col.find_one({"username": username}):
-        return jsonify({"success": False, "message": "User already exists", "data": data})
+        return jsonify({"success": False, "message": "User already exists",
+                        "data": data})
 
     hashed_pass = bcrypt.generate_password_hash(password).decode("UTF-8")
     user_col.insert_one(
-        {"username": username, "password": hashed_pass, "createdAt": datetime.now()})
+        {"username": username, "password": hashed_pass,
+         "createdAt": datetime.now()})
 
     access_token = create_access_token(identity=username)
     refresh_token = create_refresh_token(identity=username)
@@ -86,7 +98,8 @@ def logout():
 @endpoints.route("/api/get-identity", methods=["POST"])
 @jwt_required()
 def get_id():
-    return jsonify({"success": True, "message": "User found", "data": get_jwt_identity()})
+    return jsonify({"success": True, "message": "User found",
+                    "data": get_jwt_identity()})
 
 
 @endpoints.route("/api/bot-match", methods=["POST"])
@@ -95,20 +108,27 @@ def bot_match():
     data = request.get_json()
     player = data.get("playerChoice", "")
     if not player:
-        return jsonify({"success": False, "message": "Please choose an item", "data": data})
+        return jsonify({"success": False, "message": "Please choose an item",
+                        "data": data})
     bot_choice = random.choice(["Rock", "Paper", "Scissor"])
     if determine_winner(player, bot_choice):
         player_score += 1
         if player_score == 3:
             player_score = 0
-            return jsonify({"success": True, "message": "Thats Game!", "data": {"winner": "Player", "score": 3, "final": True}})
-        return jsonify({"success": True, "message": "Winner found", "data": {"winner": "Player", "score": player_score}})
+            return jsonify({"success": True, "message": "Thats Game!",
+                            "data": {"winner": "Player", "score": 3,
+                                     "final": True}})
+        return jsonify({"success": True, "message": "Winner found",
+                        "data": {"winner": "Player", "score": player_score}})
     else:
         bot_score += 1
         if bot_score == 3:
             bot_score = 0
-            return jsonify({"success": True, "message": "Thats Game!", "data": {"winner": "Bot", "score": 3, "final": True}})
-        return jsonify({"success": True, "message": "Winner found", "data": {"winner": "Bot", "score": bot_score}})
+            return jsonify({"success": True, "message": "Thats Game!",
+                            "data": {"winner": "Bot", "score": 3,
+                                     "final": True}})
+        return jsonify({"success": True, "message": "Winner found",
+                        "data": {"winner": "Bot", "score": bot_score}})
 
 
 # players will also be in these rooms too, in the documents as a list
@@ -117,7 +137,16 @@ def create_room():
     data = request.get_json()
     room_name = data.get("roomName", "")
     if room_name is None:
-        return jsonify({"success": False, "message": "No room name given", "data": data})
+        return jsonify({"success": False, "message": "No room name given",
+                        "data": data})
     rooms_col.insert_one({"roomName": room_name, "createdAt": datetime.now()})
     all_rooms = rooms_col.find({})
-    return jsonify({"success": True, "message": "Room created!", "data": [room["roomName"] for room in all_rooms]})
+    return jsonify({"success": True, "message": "Room created!",
+                    "data": [room["roomName"] for room in all_rooms]})
+
+
+@endpoints.route("api/get-room")
+def get_room():
+    all_rooms = rooms_col.find({})
+    return jsonify({"success": True, "message": "Rooms recieved",
+                    "data": [room["roomName"] for room in all_rooms]})
