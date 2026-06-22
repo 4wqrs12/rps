@@ -131,31 +131,9 @@ def bot_match():
                         "data": {"winner": "Bot", "score": bot_score}})
 
 
-# players will also be in these rooms too, in the documents as a list
-@endpoints.route("/api/create-room", methods=["POST"])
-def create_room():
-    data = request.get_json()
-    room_name = data.get("roomName", "")
-    if room_name is None:
-        return jsonify({"success": False, "message": "No room name given",
-                        "data": data})
-    rooms_col.insert_one({"roomName": room_name, "players": [],
-                          "createdAt": datetime.now()})
-    all_rooms = rooms_col.find({})
-    return jsonify({"success": True, "message": "Room created!",
-                    "data": [room["roomName"] for room in all_rooms]})
-
-
-@endpoints.route("api/get-room")
-def get_room():
-    all_rooms = rooms_col.find({})
-    return jsonify({"success": True, "message": "Rooms recieved",
-                    "data": [room["roomName"] for room in all_rooms]})
-
-
-@endpoints.route("api/join-room", methods=["POST"])
+@endpoints.route("/api/ready-player", methods=["POST"])
 @jwt_required()
-def join_room():
-    data = request.get_json()
-    name = data.get("roomName", "")
-    print(get_jwt_identity(), name)
+def ready_player():
+    if rooms_col.find_one({}) is None:
+        rooms_col.insert_one({"players": [get_jwt_identity()],
+                              "createdAt": datetime.now()})

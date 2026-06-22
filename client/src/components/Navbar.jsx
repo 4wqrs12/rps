@@ -1,32 +1,32 @@
 import Logout from "./auth/Logout";
 
 function Navbar() {
-  return (
-    <div className="bg-[#6E260E] m-2 rounded-md">
-      <nav className="flex">
-        {/*links on left side go here*/}
-        <a href="/" className="navbar-routes">
-          Home
-        </a>
-        <a href="/bot" className="navbar-routes">
-          Bot Match
-        </a>
-        <a href="/rooms" className="navbar-routes">
-          Rooms
-        </a>
-        {/* right side */}
-        <div className="ml-auto flex">
-          <a href="/login" className="navbar-routes">
-            Login
-          </a>
-          <a href="/register" className="navbar-routes">
-            Register
-          </a>
-          <Logout />
-        </div>
-      </nav>
-    </div>
-  );
+	return (
+		<div className="bg-[#6E260E] m-2 rounded-md">
+			<nav className="flex">
+				{/*links on left side go here*/}
+				<a href="/" className="navbar-routes">
+					Home
+				</a>
+				<a href="/bot" className="navbar-routes">
+					Bot Match
+				</a>
+				<a href="/multiplayer" className="navbar-routes">
+					Multiplayer
+				</a>
+				{/* right side */}
+				<div className="ml-auto flex">
+					<a href="/login" className="navbar-routes">
+						Login
+					</a>
+					<a href="/register" className="navbar-routes">
+						Register
+					</a>
+					<Logout />
+				</div>
+			</nav>
+		</div>
+	);
 }
 
 export default Navbar;
