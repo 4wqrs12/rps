@@ -12,6 +12,7 @@
 [] add button to look at passwords in text forms, but make passwords be in password/hidden form by default
 [] change Modal.jsx name
 [] in room creation page show not logged in if not logged in
+[] after creating a room put the user that created the room into that room
 
 Theme Colors:
 Almond	#EADDCA

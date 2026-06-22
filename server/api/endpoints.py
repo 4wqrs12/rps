@@ -139,7 +139,8 @@ def create_room():
     if room_name is None:
         return jsonify({"success": False, "message": "No room name given",
                         "data": data})
-    rooms_col.insert_one({"roomName": room_name, "createdAt": datetime.now()})
+    rooms_col.insert_one({"roomName": room_name, "players": [],
+                          "createdAt": datetime.now()})
     all_rooms = rooms_col.find({})
     return jsonify({"success": True, "message": "Room created!",
                     "data": [room["roomName"] for room in all_rooms]})
@@ -150,3 +151,11 @@ def get_room():
     all_rooms = rooms_col.find({})
     return jsonify({"success": True, "message": "Rooms recieved",
                     "data": [room["roomName"] for room in all_rooms]})
+
+
+@endpoints.route("api/join-room", methods=["POST"])
+@jwt_required()
+def join_room():
+    data = request.get_json()
+    name = data.get("roomName", "")
+    print(get_jwt_identity(), name)
