@@ -1,7 +1,9 @@
 import {refreshToken} from "../../../utils/refreshToken";
+import {useState} from "react";
 
 function ReadyButton() {
-	
+	const [players, setPlayers] = useState([]);
+
 	async function readyPlayer() {
 		try {
 			const res = await fetch("http://localhost:5000/api/ready-player", {
@@ -19,13 +21,19 @@ function ReadyButton() {
 					console.log("Refresh token failed");
 				}
 			}
+			if (data.success) {
+				// show modal here with game in it
+				setPlayers(data.data.players);
+				console.log(data.data.players);
+				console.log(data.message);
+			}
 		} catch (err) {
 			console.log(`Error: ${err}`);
 		}
 	}
 
 	return (<>
-		<button onClick={() => readyPlayer()} className="btn px-5 bg-[#b14b29] mt-3 hover:bg-[#803820] text-amber-200 mb-6">Ready</button>
+		<button onClick={() => readyPlayer()} disabled={players.length >= 2} className="btn px-5 bg-[#b14b29] mt-3 hover:bg-[#803820] text-amber-200 mb-6">Ready</button>
 	</>)
 }
 

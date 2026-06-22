@@ -134,6 +134,29 @@ def bot_match():
 @endpoints.route("/api/ready-player", methods=["POST"])
 @jwt_required()
 def ready_player():
-    if rooms_col.find_one({}) is None:
-        rooms_col.insert_one({"players": [get_jwt_identity()],
-                              "createdAt": datetime.now()})
+    current_user = get_jwt_identity()
+    room = rooms_col.find_one({"players": current_user})
+    if room is not None and isinstance(room.get("players"), list) and len(room["players"]) == 1:
+        return jsonify({"success": True,
+                        "message": "Player already waiting",
+                        "data": {"players": room["players"]}})
+    if room is not None and isinstance(room.get("players"), list) and len(room["players"]) == 2:
+        return jsonify({"success": True,
+                        "message": "Player already in a full room",
+                        "data": {"players": room["players"]}})
+    available_room = rooms_col.find_one({
+        "$and": [
+            {"players": {"$size": 1}},
+            {"players": {"$ne": current_user}}
+        ]
+    })
+    if available_room:
+        rooms_col.update_one({"_id": available_room["_id"]},
+                             {"$push": {"players": current_user}})
+        return jsonify({"success": True, "message": "Player added",
+                        "data": {"players": available_room["players"] + [current_user]}})
+    rooms_col.insert_one({"players": [current_user],
+                          "createdAt": datetime.now()})
+    return jsonify({"success": True, "message": "Player ready",
+                    "data": {"players": [current_user]}})
+    
