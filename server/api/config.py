@@ -12,9 +12,11 @@ bcrypt = Bcrypt()
 
 jwt_key = os.getenv("JWT_KEY")
 flask_key = os.getenv("FLASK_KEY")
+mongo_uri = os.getenv("MONGO_URI")
+frontend_url = os.getenv("FRONTEND_URL")
+
 access_expire = timedelta(minutes=1)
 refresh_expire = timedelta(days=7)
-mongo_uri = os.getenv("MONGO_URI")
 client = MongoClient(mongo_uri)
 db = client["rps"]
 user_col = db["users"]

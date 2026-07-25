@@ -1,9 +1,10 @@
+import { API_URL } from "../../utils/api";
 import { refreshToken } from "../../utils/refreshToken";
 
 function Logout() {
   async function logoutUser() {
     try {
-      const res = await fetch("http://localhost:5000/api/logout", {
+      const res = await fetch(`${API_URL}/api/logout`, {
         method: "POST",
         credentials: "include",
       });

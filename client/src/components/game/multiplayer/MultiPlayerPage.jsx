@@ -1,4 +1,5 @@
 import {useEffect, useState} from "react";
+import { API_URL } from "../../../utils/api";
 import {refreshToken} from "../../../utils/refreshToken";
 import ReadyButton from "./ReadyButton";
 
@@ -7,7 +8,7 @@ function MultiPlayerPage() {
 
  async function fetchUsername() {
     try {
-      const res = await fetch("http://localhost:5000/api/get-identity", {
+      const res = await fetch(`${API_URL}/api/get-identity`, {
         method: "POST",
         credentials: "include",
       });

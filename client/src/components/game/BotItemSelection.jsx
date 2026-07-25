@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { API_URL } from "../../utils/api";
 import Modal from "../Modal";
 
 function UserItemSelection() {
@@ -26,7 +27,7 @@ function UserItemSelection() {
     setShowOptions(false);
     setShow(true);
     try {
-      const res = await fetch(`http://localhost:5000/api/bot-match`, {
+      const res = await fetch(`${API_URL}/api/bot-match`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

@@ -1,7 +1,7 @@
 import os
 from flask import Flask
 from flask_cors import CORS
-from api.config import flask_key, jwt_key, access_expire, refresh_expire, jwt, bcrypt, revoked_col
+from api.config import flask_key, jwt_key, access_expire, refresh_expire, jwt, bcrypt, revoked_col, frontend_url
 
 def api():
     app = Flask(__name__)
@@ -11,9 +11,10 @@ def api():
     app.config["JWT_REFRESH_TOKEN_EXPIRES"] = refresh_expire
     app.config["JWT_TOKEN_LOCATION"] = ["cookies"]
     app.config["JWT_COOKIE_SECURE"] = False
-    app.config["JWT_COOKIE_SAMESITE"] = "Lax"
+    app.config["JWT_COOKIE_SAMESITE"] = "Lax" # "Lax"
     app.config["JWT_COOKIE_CSRF_PROTECT"] = False
-    CORS(app, supports_credentials=True, origins=["http://localhost:5173"])
+    CORS(app, supports_credentials=True, origins=["http://localhost:5173", frontend_url])
+    #CORS(app, supports_credentials=True)
     jwt.init_app(app)
     bcrypt.init_app(app)
     @jwt.token_in_blocklist_loader

@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { API_URL } from "../../utils/api";
 import UserAuth from "./UserAuth";
 import Modal from "../Modal";
 
@@ -19,7 +20,7 @@ function LoginPage() {
   async function loginUser(e) {
     e.preventDefault();
     try {
-      const res = await fetch("http://localhost:5000/api/login", {
+      const res = await fetch(`${API_URL}/api/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

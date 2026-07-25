@@ -1,4 +1,5 @@
 import {refreshToken} from "../../../utils/refreshToken";
+import { API_URL } from "../../../utils/api";
 import {useState} from "react";
 
 function ReadyButton() {
@@ -6,7 +7,7 @@ function ReadyButton() {
 
 	async function readyPlayer() {
 		try {
-			const res = await fetch("http://localhost:5000/api/ready-player", {
+			const res = await fetch(`${API_URL}/api/ready-player`, {
 				method: "POST",
 				credentials: "include",
 			});

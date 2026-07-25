@@ -1,6 +1,8 @@
+import { API_URL } from "./api";
+
 export async function refreshToken() {
 	try {
-		const refreshRes = await fetch("http://localhost:5000/api/refresh", {
+		const refreshRes = await fetch(`${API_URL}/api/refresh`, {
 			method: "POST",
 			credentials: "include",
 		});
