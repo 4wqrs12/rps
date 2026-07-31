@@ -1,6 +1,6 @@
-from api import api
+import api
 
-app = api()
+app = api.api()
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", debug=True)
+    api.socketio.run(app, host="0.0.0.0", debug=True)

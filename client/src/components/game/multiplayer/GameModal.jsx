@@ -1,8 +1,8 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 const STORAGE_KEY = "rps-player-choice";
 
-function GameModal({ showModal, setShowModal }) {
+function GameModal({ showModal, setShowModal, roomId, username, socket, gameState, setGameState }) {
   const [selectedChoice, setSelectedChoice] = useState(() => {
     if (typeof window === "undefined") return null;
 
@@ -33,6 +33,8 @@ function GameModal({ showModal, setShowModal }) {
     }
   });
 
+  const [isTransitioning, setIsTransitioning] = useState(false);
+
   useEffect(() => {
     if (typeof window === "undefined") return;
 
@@ -42,7 +44,47 @@ function GameModal({ showModal, setShowModal }) {
     );
   }, [selectedChoice, isConfirmed]);
 
+  useEffect(() => {
+    if (!showModal) {
+      setSelectedChoice(null);
+      setIsConfirmed(false);
+      setIsTransitioning(false);
+    }
+  }, [showModal]);
+
+  useEffect(() => {
+    if (!showModal || gameState.gameOver || gameState.status !== "round-result") {
+      return undefined;
+    }
+
+    setIsTransitioning(true);
+    setSelectedChoice(null);
+    setIsConfirmed(false);
+
+    const nextRoundNumber = Math.min((gameState.roundsPlayed || 0) + 1, 3);
+    const timeoutId = window.setTimeout(() => {
+      setIsTransitioning(false);
+      setGameState((prev) => ({
+        ...prev,
+        status: "waiting",
+        message: `Round ${nextRoundNumber} is starting...`,
+      }));
+    }, 2000);
+
+    return () => window.clearTimeout(timeoutId);
+  }, [gameState.gameOver, gameState.roundsPlayed, gameState.status, setGameState, showModal]);
+
+  useEffect(() => {
+    if (gameState.gameOver && typeof window !== "undefined") {
+      window.localStorage.removeItem(STORAGE_KEY);
+    }
+  }, [gameState.gameOver]);
+
   if (!showModal) return null;
+
+  const finalResultLabel = gameState.finalResult?.winnerName
+    ? `${gameState.finalResult.winnerName} is the winner`
+    : gameState.finalResult?.message || gameState.yourResult || gameState.message || "Match complete";
 
   const choices = [
     { label: "Rock", emoji: "🪨", value: "rock" },
@@ -51,9 +93,20 @@ function GameModal({ showModal, setShowModal }) {
   ];
 
   const handleReady = () => {
-    if (!selectedChoice) return;
-    console.log("Player choice:", selectedChoice);
+    if (!selectedChoice || !roomId || !socket || !username) return;
+
     setIsConfirmed(true);
+    setGameState((prev) => ({
+      ...prev,
+      status: "ready",
+      message: "Waiting for the opponent to lock in...",
+    }));
+
+    socket.emit("player-ready", {
+      roomId,
+      username,
+      choice: selectedChoice,
+    });
   };
 
   return (
@@ -63,7 +116,9 @@ function GameModal({ showModal, setShowModal }) {
           <div>
             <h2 className="text-3xl font-semibold">Choose Your Move</h2>
             <p className="mt-2 text-lg text-[#EADDCA]">
-              Select your pick and confirm when you are ready.
+              {gameState.gameOver
+                ? "The match is over."
+                : "Select your pick and confirm when you are ready."}
             </p>
           </div>
           <button
@@ -74,36 +129,51 @@ function GameModal({ showModal, setShowModal }) {
           </button>
         </div>
 
-        <div className="grid gap-4 md:grid-cols-3">
-          {choices.map((choice) => {
-            const isSelected = selectedChoice === choice.value;
-            return (
-              <button
-                key={choice.value}
-                disabled={isConfirmed}
-                onClick={() => setSelectedChoice(choice.value)}
-                className={`rounded-xl border-2 px-4 py-6 text-center text-xl font-semibold transition ${
-                  isSelected
-                    ? "border-[#6E260E] bg-[#E1C16E] text-[#6E260E]"
-                    : "border-[#EADDCA] bg-[#DAA06D] text-[#EADDCA]"
-                } ${isConfirmed ? "opacity-70" : "hover:translate-y-[-2px]"}`}
-              >
-                <div className="text-4xl">{choice.emoji}</div>
-                <div className="mt-2">{choice.label}</div>
-              </button>
-            );
-          })}
-        </div>
+        {gameState.gameOver ? (
+          <div className="rounded-2xl border border-[#EADDCA] bg-[#E1C16E] p-6 text-center text-[#6E260E]">
+            <h3 className="text-2xl font-semibold">{finalResultLabel}</h3>
+            <p className="mt-3 text-lg">Final score: {gameState.scores?.[username] ?? 0} - {gameState.scores?.[Object.keys(gameState.scores).find((key) => key !== username)] ?? 0}</p>
+            <p className="mt-2 text-base">{finalResultLabel}</p>
+          </div>
+        ) : (
+          <>
+            <div className="grid gap-4 md:grid-cols-3">
+              {choices.map((choice) => {
+                const isSelected = selectedChoice === choice.value;
+                return (
+                  <button
+                    key={choice.value}
+                    disabled={isConfirmed || isTransitioning}
+                    onClick={() => setSelectedChoice(choice.value)}
+                    className={`rounded-xl border-2 px-4 py-6 text-center text-xl font-semibold transition ${
+                      isSelected
+                        ? "border-[#6E260E] bg-[#E1C16E] text-[#6E260E]"
+                        : "border-[#EADDCA] bg-[#DAA06D] text-[#EADDCA]"
+                    } ${(isConfirmed || isTransitioning) ? "opacity-70" : "hover:translate-y-[-2px]"}`}
+                  >
+                    <div className="text-4xl">{choice.emoji}</div>
+                    <div className="mt-2">{choice.label}</div>
+                  </button>
+                );
+              })}
+            </div>
 
-        <div className="mt-8 flex justify-center">
-          <button
-            onClick={handleReady}
-            disabled={!selectedChoice || isConfirmed}
-            className="rounded-full bg-[#6E260E] px-8 py-3 text-lg font-semibold text-[#EADDCA] cursor-pointer transition hover:bg-[#4b1809] disabled:cursor-not-allowed disabled:bg-[#C19A6B]"
-          >
-            Ready
-          </button>
-        </div>
+            <div className="mt-6 rounded-2xl border border-[#EADDCA] bg-[#DAA06D]/70 p-4 text-center text-[#EADDCA]">
+              <p>{isTransitioning ? `Round ${Math.min(gameState.roundsPlayed + 1, 3)} is starting soon...` : gameState.message}</p>
+              <p className="mt-2 text-sm">Rounds played: {gameState.roundsPlayed}</p>
+            </div>
+
+            <div className="mt-8 flex justify-center">
+              <button
+                onClick={handleReady}
+                disabled={!selectedChoice || isConfirmed || isTransitioning}
+                className="rounded-full bg-[#6E260E] px-8 py-3 text-lg font-semibold text-[#EADDCA] cursor-pointer transition hover:bg-[#4b1809] disabled:cursor-not-allowed disabled:bg-[#C19A6B]"
+              >
+                {isConfirmed ? "Waiting..." : "Ready"}
+              </button>
+            </div>
+          </>
+        )}
       </div>
     </div>
   );
